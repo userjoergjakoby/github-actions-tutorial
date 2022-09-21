@@ -121,7 +121,6 @@ jobs:
 
       - name: 'Test'
         run: npm test
-
 ```
 
 ## Next step (Deployment to GitHub pages)
