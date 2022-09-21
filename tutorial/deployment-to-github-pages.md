@@ -39,7 +39,7 @@ Commit your `index.html` and push it using `git push --set-upstream origin pages
 
 ### Enable GitHub pages deployment
 Go to your repository &rarr; Settings &rarr; Pages &rarr; Build and deployment. 
-You will be able to select a branch, wich will be deployed to GitHub pages.  
+You will be able to select a branch, which will be deployed to GitHub pages.  
 
 ![Enable deployment](assets/enable-deployment.png)  
 

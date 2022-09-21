@@ -44,13 +44,49 @@ You can add the `GITHUB_TOKEN` as workflow secret. Use the following code:
 ```yml
   workflow_call:
     secrets:
-      GH_TOKEN:
+      GITHUB_TOKEN:
         required: true
 ```
 
 ## Run a container / Checkout the code / Install Node.js / Install dependencies
-These steps are the same.......
+These steps are the same, as in [running-tests workflow.](deployment-to-github-pages.md)
 
+
+## Build 
+Create a build directory with a `Production build` of your project.
+
+```yml
+    - name: '🛠️ Build'
+      run: npm run build --prod
+```
+
+
+## Install rsync
+Synchronizes files and directories between local machine and host.
+
+```yml
+    - name: '📚 Install rsync'
+      run: sudo apt-get update && sudo apt-get install -y rsync
+```
+
+
+## Deploy to pages
+Following piece of code deployes the build to Github pages, using "JamesIves/github-pages-deploy-action@v4", a pre-defined github page deploy action.([Here](https://github.com/actions) is the reference to the available predefined actions from GitHub).  
+
+Once the file is built, it will copy the `dist/github-actions-tutorial/` folder to the Github pages.  
+
+
+```yml
+    - name: '🚀 Deploy to pages'
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: pages # The branch the action should deploy to.
+        folder: dist/github-actions-tutorial/ # The folder the action should deploy.
+        target-folder: ./
+        token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+ 
 ## The workflow
 ```yml
 name: Deploy
@@ -62,7 +98,7 @@ on:
 
   workflow_call:
     secrets:
-      GH_TOKEN:
+      GITHUB_TOKEN:
         required: true
 jobs:
   docs:
@@ -94,5 +130,7 @@ jobs:
           branch: pages # The branch the action should deploy to.
           folder: dist/github-actions-tutorial/ # The folder the action should deploy.
           target-folder: ./
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+This is the whole Angular application deployment process. Best wishes with your deployment.
