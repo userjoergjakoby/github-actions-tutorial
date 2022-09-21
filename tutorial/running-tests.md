@@ -116,9 +116,6 @@ jobs:
       - name: '⛓️ Install dependencies'
         run: npm ci --no-optional --no-audit --prefer-offline --progress=false
 
-      - name: 'Lint'
-        run: npm run lint
-
       - name: 'Test'
         run: npm test
 ```
