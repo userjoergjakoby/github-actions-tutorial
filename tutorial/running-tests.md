@@ -1,9 +1,9 @@
 # Running tests inside GitHub actions
 Goal of this chapter is to run the angular tests when a pull request is created or updated.
-For this we are going to create a new workflow.
+For this you are going to create a new workflow.
 
 ## Steps of the workflow
-For running angular tests inside the workflow, we need to follow these steps:
+For running angular tests inside the workflow, you need to follow these steps:
 1. Run a container
 2. Checkout the code
 3. Install Node.js
@@ -29,7 +29,7 @@ jobs:
 ```
 
 ## Checkout the code
-To checkout the repository we use the action `actions/checkout@v3` ([Find the repository on GitHub](https://github.com/actions/checkout)).
+To checkout the repository you use the action `actions/checkout@v3` ([Find the repository on GitHub](https://github.com/actions/checkout)).
 It uses a parameter `with` to define which commit should be checked out.
 `${{ github.event.pull_request.head.sha }}` gets the head of the current pull request.
 ```yml
@@ -42,7 +42,7 @@ It uses a parameter `with` to define which commit should be checked out.
 
 ## Install Node.js
 By using `actions/setup-node@v3` ([Find the repository on GitHub](https://github.com/actions/setup-node)),
-we can easily set up Node.js, so we will be able to run Angular tests.
+you can easily set up Node.js, so you will be able to run Angular tests.
 ```yml
       - name: '⚙️ Use Node.js'
         uses: actions/setup-node@v3
@@ -53,24 +53,39 @@ we can easily set up Node.js, so we will be able to run Angular tests.
 
 ## Install dependencies
 It is also possible to run custom code for example `npm install`.
-By adding the following we will be able to install dependencies.
+By adding the following you will be able to install dependencies.
 ```yml
       - name: '⛓️ Install dependencies'
         run: npm ci --no-optional --no-audit --prefer-offline --progress=false
 ```
 
 ## Run the tests
-To run the tests we need to call `npm test`. We will also do this by defining a new step with the `run` property.
+To run the tests you need to call `npm test`. You will also do this by defining a new step with the `run` property.
 ```yml
       - name: 'Test'
         run: npm test
 ```
 
 ## Trigger the workflow
-To trigger the workflow we now need to create a new pull request.
+To trigger the workflow you now need to create a new pull request.
 To do so, create a new branch, do some changes and push it. Now create a pull request.
-This should start a new build which you can find in the tab `Actions`.
+This should start a new build which you can find in the tab `Actions`.  
+
 ![Running GitHub Actions](assets/running-actions.png)
+
+[//]: # (TODO: Hier noch Regeln für einen PR einfügen, PR kann nur gemerged werden, wenn Workflows erfolgreich!)
+## Branch protection / PR rules
+Without any further settings it will be possible to merge the pull request with or without a successful workflow run.
+To make the successful run a condition to being able to merge a pull request you need to set up branch protection.  
+Go to your repository &rarr; Settings &rarr; Branches &rarr; Branch protection rules &rarr; Add rule  
+
+![](assets/branch-protection.png)  
+
+You can protect all your branches by simply adding `*` as branch name pattern.
+By checking the option `Require status checks to pass before merging`, it will no longer be possible to merge pull requests
+without a successful workflow run.  
+
+![](assets/add-branch-protection.png)
 
 ## Next step (Deployment to GitHub pages)
 [Continue with the tutorial](deployment-to-github-pages.md)
