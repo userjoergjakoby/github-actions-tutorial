@@ -18,6 +18,8 @@ Add the following code to your `test-on-pullrequest.yml`.
 It will run the workflow on (re-)opening and synchronizing a pull request.
 It will then create a job called `Run Angular tests` running inside an ubuntu container.
 ```yml
+name: Run Angular tests
+
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
@@ -73,7 +75,6 @@ This should start a new build which you can find in the tab `Actions`.
 
 ![Running GitHub Actions](assets/running-actions.png)
 
-[//]: # (TODO: Hier noch Regeln für einen PR einfügen, PR kann nur gemerged werden, wenn Workflows erfolgreich!)
 ## Branch protection / PR rules
 Without any further settings it will be possible to merge the pull request with or without a successful workflow run.
 To make the successful run a condition to being able to merge a pull request you need to set up branch protection.  
@@ -86,6 +87,42 @@ By checking the option `Require status checks to pass before merging`, it will n
 without a successful workflow run.  
 
 ![](assets/add-branch-protection.png)
+
+## The workflow
+```yml
+name: Run Angular tests
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  docs:
+    name: 'Run Angular tests'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: '☁️ Checkout repository'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: '⚙️ Use Node.js'
+        uses: actions/setup-node@v3
+        with:
+          check-latest: true
+          cache: 'npm'
+
+      - name: '⛓️ Install dependencies'
+        run: npm ci --no-optional --no-audit --prefer-offline --progress=false
+
+      - name: 'Lint'
+        run: npm run lint
+
+      - name: 'Test'
+        run: npm test
+
+```
 
 ## Next step (Deployment to GitHub pages)
 [Continue with the tutorial](deployment-to-github-pages.md)
