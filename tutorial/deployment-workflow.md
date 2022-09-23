@@ -38,15 +38,6 @@ To check the permissions go to your repository &rarr; Settings &rarr; Actions &r
 
 The permissions should be set to `Read and write permissions`
 
-### Workflow secrets
-You can add the `GITHUB_TOKEN` as workflow secret. Use the following code:  
-
-```yml
-  workflow_call:
-    secrets:
-      GITHUB_TOKEN:
-        required: true
-```
 
 ## Run a container / Checkout the code / Install Node.js / Install dependencies
 These steps are the same, as in [running-tests workflow.](deployment-to-github-pages.md)
@@ -116,10 +107,6 @@ on:
     branches:
       - 'main'
 
-  workflow_call:
-    secrets:
-      GITHUB_TOKEN:
-        required: true
 jobs:
   docs:
     name: '🌍 Deploy'
